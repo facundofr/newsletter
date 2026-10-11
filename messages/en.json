@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "newsletter": "Newsletter",
+    "services": "Services",
+    "subscribe": "Subscribe"
+  },
+  "home": {
+    "basedIn": "Based in",
+    "currentFocus": "Current focus",
+    "latestPosts": "Latest posts",
+    "fromNewsletter": "From the newsletter",
+    "seeAll": "See all",
+    "dailyTools": "Daily tools",
+    "devStack": "Development stack",
+    "contactTitle": "Contact",
+    "contactText": "Want to chat, collaborate or work together? Drop me a line.",
+    "inquiries": "General & business inquiries"
+  },
+  "projects": {
+    "visit": "Visit site",
+    "empty": "No projects yet."
+  },
+  "posts": {
+    "minRead": "{minutes} min read",
+    "empty": "No posts yet.",
+    "back": "Back to newsletter",
+    "onlySpanish": "This post is only available in Spanish.",
+    "onlyEnglish": "This post is only available in English.",
+    "enjoyed": "Enjoyed it? Get the next ones in your inbox."
+  },
+  "subscribe": {
+    "placeholder": "you@email.com",
+    "button": "Subscribe",
+    "sending": "Sending…",
+    "success": "Done! You're subscribed.",
+    "invalid": "Please enter a valid email.",
+    "error": "Something went wrong, please try again.",
+    "noSpam": "No spam. Unsubscribe anytime."
+  },
+  "services": {
+    "eyebrow": "Work with me",
+    "offerings": "What I do",
+    "orEmail": "or email me at"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "unsubscribe": {
+    "title": "You've unsubscribed",
+    "text": "You won't receive any more emails. You can subscribe again anytime.",
+    "invalid": "This link is invalid or you're already unsubscribed.",
+    "back": "Back home",
+    "button": "Unsubscribe"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back home"
+  }
+}

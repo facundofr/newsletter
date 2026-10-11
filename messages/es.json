@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "projects": "Proyectos",
+    "newsletter": "Newsletter",
+    "services": "Servicios",
+    "subscribe": "Suscribirme"
+  },
+  "home": {
+    "basedIn": "Vivo en",
+    "currentFocus": "Foco actual",
+    "latestPosts": "Últimos artículos",
+    "fromNewsletter": "Del newsletter",
+    "seeAll": "Ver todos",
+    "dailyTools": "Herramientas diarias",
+    "devStack": "Stack de desarrollo",
+    "contactTitle": "Contacto",
+    "contactText": "¿Querés charlar, colaborar o trabajar juntos? Escribime.",
+    "inquiries": "Consultas generales y negocios"
+  },
+  "projects": {
+    "visit": "Visitar sitio",
+    "empty": "Todavía no hay proyectos."
+  },
+  "posts": {
+    "minRead": "{minutes} min de lectura",
+    "empty": "Todavía no hay artículos.",
+    "back": "Volver al newsletter",
+    "onlySpanish": "Este artículo está disponible solo en español.",
+    "onlyEnglish": "Este artículo está disponible solo en inglés.",
+    "enjoyed": "¿Te gustó? Recibí los próximos en tu mail."
+  },
+  "subscribe": {
+    "placeholder": "tu@email.com",
+    "button": "Suscribirme",
+    "sending": "Enviando…",
+    "success": "¡Listo! Ya estás suscripto.",
+    "invalid": "Ingresá un email válido.",
+    "error": "Algo salió mal, probá de nuevo.",
+    "noSpam": "Sin spam. Te podés dar de baja cuando quieras."
+  },
+  "services": {
+    "eyebrow": "Trabajemos juntos",
+    "offerings": "Qué hago",
+    "orEmail": "o escribime a"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados."
+  },
+  "unsubscribe": {
+    "title": "Te diste de baja",
+    "text": "No vas a recibir más emails. Podés volver a suscribirte cuando quieras.",
+    "invalid": "El link no es válido o ya te diste de baja.",
+    "back": "Volver al inicio",
+    "button": "Darme de baja"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "back": "Volver al inicio"
+  }
+}

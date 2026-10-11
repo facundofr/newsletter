@@ -1,0 +1,62 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Post {
+  id             String     @id @default(cuid())
+  slug           String     @unique
+  titleEs        String
+  titleEn        String?
+  excerptEs      String     @default("")
+  excerptEn      String?
+  contentEs      String     @default("")
+  contentEn      String?
+  coverImage     String?
+  status         PostStatus @default(DRAFT)
+  publishedAt    DateTime   @default(now())
+  readingMinutes Int        @default(1)
+  emailSentAt    DateTime?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model Project {
+  id            String   @id @default(cuid())
+  name          String
+  descriptionEs String   @default("")
+  descriptionEn String?
+  image         String?
+  url           String?
+  tag           String?
+  featured      Boolean  @default(true)
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SiteSettings {
+  id        Int      @id @default(1)
+  data      Json
+  updatedAt DateTime @updatedAt
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  locale    String   @default("es")
+  token     String   @unique @default(cuid())
+  createdAt DateTime @default(now())
+}
