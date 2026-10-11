@@ -3,11 +3,13 @@
 import type { Project } from "@prisma/client";
 import { startTransition, useActionState, useState } from "react";
 import { ImageField } from "@/components/admin/ImageField";
+import { DEFAULT_ACCENT } from "@/components/site/project-accent";
 import { saveProject, type FormState } from "../actions";
 
 export function ProjectForm({ project }: { project: Project | null }) {
   const [state, action, pending] = useActionState<FormState, FormData>(saveProject, {});
   const [image, setImage] = useState(project?.image ?? "");
+  const [accent, setAccent] = useState(project?.accentColor ?? DEFAULT_ACCENT);
 
   return (
     <form
@@ -19,15 +21,9 @@ export function ProjectForm({ project }: { project: Project | null }) {
       className="card space-y-5 p-6"
     >
       {project && <input type="hidden" name="id" value={project.id} />}
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label className="label">Nombre</label>
-          <input name="name" defaultValue={project?.name} required className="input" />
-        </div>
-        <div>
-          <label className="label">Etiqueta (SaaS, App, Open Source…)</label>
-          <input name="tag" defaultValue={project?.tag ?? ""} className="input" />
-        </div>
+      <div>
+        <label className="label">Nombre</label>
+        <input name="name" defaultValue={project?.name} required className="input" />
       </div>
       <div>
         <label className="label">Descripción 🇦🇷 Español</label>
@@ -42,8 +38,21 @@ export function ProjectForm({ project }: { project: Project | null }) {
         <input name="url" defaultValue={project?.url ?? ""} placeholder="https://" className="input" />
       </div>
       <div>
-        <label className="label">Imagen</label>
+        <label className="label">Captura / imagen (se muestra a la derecha de la tarjeta)</label>
         <ImageField name="image" value={image} onChange={setImage} />
+      </div>
+      <div>
+        <label className="label">Color del botón "Visit Site"</label>
+        <div className="flex items-center gap-3">
+          <input
+            type="color"
+            value={accent}
+            onChange={(e) => setAccent(e.target.value)}
+            className="h-10 w-14 cursor-pointer rounded-lg border border-black/[0.07] bg-white p-1"
+          />
+          <input name="accentColor" value={accent} onChange={(e) => setAccent(e.target.value)} className="input w-32" />
+          <span className="rounded-full px-5 py-2 text-sm font-semibold text-white" style={{ backgroundColor: accent }}>Visit Site</span>
+        </div>
       </div>
       <div className="flex flex-wrap items-center gap-6">
         <label className="flex items-center gap-2 text-sm">

@@ -29,9 +29,9 @@ export function readingMinutes(html: string): number {
   return Math.max(1, Math.round(words / 200));
 }
 
-export function formatDate(date: Date, locale: Locale): string {
+export function formatDate(date: Date, locale: Locale, long = false): string {
   return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "es-AR", {
-    month: "short",
+    month: long ? "long" : "short",
     day: "numeric",
     year: "numeric",
   }).format(date);

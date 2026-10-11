@@ -5,17 +5,12 @@ export default {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
-      },
       colors: {
-        ink: "#0a0a0a",
-        muted: "#6b6b6b",
-        line: "#ececec",
-        soft: "#f6f6f6",
-      },
-      borderRadius: {
-        "4xl": "2rem",
+        // Kept for the admin panel
+        ink: "#000000",
+        muted: "rgba(0,0,0,0.5)",
+        line: "rgba(0,0,0,0.07)",
+        soft: "#F7F7F7",
       },
     },
   },

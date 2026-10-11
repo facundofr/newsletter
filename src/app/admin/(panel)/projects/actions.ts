@@ -16,7 +16,8 @@ const projectSchema = z.object({
   descriptionEn: optional,
   image: optional,
   url: optional.refine((v) => !v || /^https?:\/\//.test(v), "La URL debe empezar con http:// o https://"),
-  tag: optional,
+  tag: optional.optional(),
+  accentColor: optional.refine((v) => !v || /^#[0-9a-fA-F]{6}$/.test(v), "Color inválido"),
   featured: z.literal("on").optional(),
   order: z.coerce.number().int().catch(0),
 });

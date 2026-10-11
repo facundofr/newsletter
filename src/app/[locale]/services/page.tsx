@@ -3,103 +3,125 @@ import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { getSettings } from "@/lib/settings";
 import { pick } from "@/lib/text";
-import { Icon } from "@/components/site/Icon";
-import { ArrowUpRight, CheckIcon } from "@/components/site/icons";
+import { RocketIcon } from "@/components/site/icons";
+import { PageHero } from "@/components/site/PageHero";
+import { Reveal } from "@/components/site/Reveal";
 import { SectionHeading } from "@/components/site/SectionHeading";
 
 type Props = { params: Promise<{ locale: Locale }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "services" });
-  return { title: t("eyebrow") };
+  return { title: pick((await getSettings()).services.title, locale) };
 }
+
+const CARD = "flex h-full flex-col gap-[20px] rounded-[24px] border border-black/[0.01] bg-[#F7F7F7] p-[28px]";
+const CARD_TITLE = "text-[20px] font-semibold leading-[26px] tracking-[-0.4px] text-black";
 
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params;
   const [s, t] = await Promise.all([getSettings(), getTranslations("services")]);
   const sv = s.services;
+  const p = (v: Parameters<typeof pick>[0]) => pick(v, locale);
 
-  const cta = (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-      <a href={s.profile.calendlyUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
-        {pick(sv.ctaLabel, locale)} <ArrowUpRight />
-      </a>
-      <span className="text-sm text-muted">
-        {t("orEmail")}{" "}
-        <a href={`mailto:${s.profile.email}`} className="font-medium text-ink underline-offset-4 hover:underline">
-          {s.profile.email}
-        </a>
-      </span>
-    </div>
+  const bookCall = (extra = "") => (
+    <a href={s.profile.calendlyUrl} target="_blank" rel="noopener noreferrer" className={`btn-blue ${extra}`}>
+      {p(sv.ctaLabel)}
+    </a>
   );
 
   return (
-    <div className="container-site pt-10 sm:pt-20">
-      <section>
-        <p className="eyebrow">{t("eyebrow")}</p>
-        <h1 className="mt-3 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight sm:text-6xl">{pick(sv.headline, locale)}</h1>
-        <p className="mt-6 max-w-xl text-lg text-muted">{pick(sv.intro, locale)}</p>
-        <div className="mt-8">{cta}</div>
-      </section>
+    <>
+      <PageHero icon={<RocketIcon strokeWidth={1.75} className="h-10 w-10 text-black/70 sm:h-14 sm:w-14" />} title={p(sv.title)}>
+        <p className="mt-[16px] max-w-[480px] whitespace-pre-line text-[16px] leading-[22px] text-black/50">{p(sv.intro)}</p>
+        {bookCall("mt-[24px]")}
+      </PageHero>
 
-      <section className="mt-24">
-        <SectionHeading title={t("offerings")} />
-        <div className="grid gap-3 md:grid-cols-3">
+      <section className="mx-auto max-w-[880px] px-[28px] pb-20 sm:px-6">
+        <Reveal>
+          <SectionHeading eyebrow={t("offerings")} title={p(sv.offeringsTitle)} size="md" />
+        </Reveal>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {sv.offerings.map((o, i) => (
-            <div key={i} className="card p-6">
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-soft text-xl">
-                <Icon value={o.icon} />
-              </span>
-              <h3 className="mt-6 text-lg font-semibold tracking-tight">{pick(o.title, locale)}</h3>
-              <p className="mt-2 text-sm text-muted">{pick(o.description, locale)}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mt-24">
-        <SectionHeading title={pick(sv.processTitle, locale)} />
-        <ol className="grid gap-3 md:grid-cols-2">
-          {sv.steps.map((step, i) => (
-            <li key={i} className="card flex gap-5 p-6">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink text-sm font-semibold text-white">
-                {i + 1}
-              </span>
-              <div>
-                <h3 className="font-semibold tracking-tight">{pick(step.title, locale)}</h3>
-                <p className="mt-1.5 text-sm text-muted">{pick(step.description, locale)}</p>
+            <Reveal key={i} delay={i * 80}>
+              <div className={CARD}>
+                <div className="flex items-center gap-[12px]">
+                  <div className="round-icon">
+                    <span className="text-[16px] leading-none">{o.icon}</span>
+                  </div>
+                  <h3 className={CARD_TITLE}>{p(o.title)}</h3>
+                </div>
+                <p className="text-[14px] leading-[19px] text-black/50">{p(o.description)}</p>
               </div>
-            </li>
+            </Reveal>
           ))}
-        </ol>
-      </section>
-
-      <section className="mt-24">
-        <SectionHeading title={pick(sv.fitTitle, locale)} />
-        <ul className="card divide-y divide-line">
-          {sv.fit.map((f, i) => (
-            <li key={i} className="flex items-center gap-4 p-5">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                <CheckIcon />
-              </span>
-              {pick(f.label, locale)}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="mt-24 rounded-4xl bg-ink p-8 text-white sm:p-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{pick(sv.ctaTitle, locale)}</h2>
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <a href={s.profile.calendlyUrl} target="_blank" rel="noopener noreferrer" className="btn-primary bg-white text-ink hover:bg-neutral-200">
-            {pick(sv.ctaLabel, locale)} <ArrowUpRight />
-          </a>
-          <a href={`mailto:${s.profile.email}`} className="text-sm text-neutral-300 hover:text-white">
-            {s.profile.email}
-          </a>
         </div>
       </section>
-    </div>
+
+      <section className="mx-auto max-w-[880px] px-[28px] pb-20 sm:px-6">
+        <Reveal>
+          <SectionHeading eyebrow={t("process")} title={p(sv.processTitle)} size="md" />
+        </Reveal>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {sv.steps.map((step, i) => (
+            <Reveal key={i} delay={(i % 2) * 80}>
+              <div className={CARD}>
+                <div className="flex items-center gap-[12px]">
+                  <div className="round-icon">
+                    <span className="text-[14px] font-semibold text-black">{i + 1}</span>
+                  </div>
+                  <h3 className={CARD_TITLE}>{p(step.title)}</h3>
+                </div>
+                <ul className="flex flex-col gap-[8px]">
+                  {p(step.description)
+                    .split("\n")
+                    .map((line) => line.trim())
+                    .filter(Boolean)
+                    .map((line, j) => (
+                      <li key={j} className="flex items-start gap-[8px] text-[14px] leading-[19px] text-black/50">
+                        <span className="mt-[6px] h-[5px] w-[5px] shrink-0 rounded-full bg-black/20" />
+                        {line}
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[880px] px-[28px] pb-20 sm:px-6">
+        <Reveal>
+          <SectionHeading eyebrow={t("fit")} title={p(sv.fitTitle)} size="md" />
+        </Reveal>
+        <Reveal>
+          <div className="rounded-[24px] border border-black/[0.01] bg-[#F7F7F7] p-[28px]">
+            {sv.fit.map((f, i) => (
+              <div key={i}>
+                {i > 0 && <div className="my-[16px] h-px bg-black/[0.06]" />}
+                <div className="flex items-center gap-[16px]">
+                  <div className="round-icon">
+                    <span className="text-[14px]">✓</span>
+                  </div>
+                  <p className="text-[16px] font-semibold leading-[22px] tracking-[-0.32px] text-black">{p(f.label)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </section>
+
+      <section className="mx-auto max-w-[880px] px-[28px] pb-40 sm:px-6">
+        <Reveal className="flex flex-col items-center text-center">
+          <h2 className="mb-[8px] text-[28px] font-semibold leading-[32.5px] tracking-[-0.56px] text-black sm:text-[36px] sm:leading-[41.8px] sm:tracking-[-0.72px]">
+            {p(sv.ctaTitle)}
+          </h2>
+          <h2 className="mb-[16px] text-[28px] font-semibold leading-[32.5px] tracking-[-0.56px] text-black/50 sm:text-[36px] sm:leading-[41.8px] sm:tracking-[-0.72px]">
+            {p(sv.ctaSubtitle)}
+          </h2>
+          {bookCall()}
+        </Reveal>
+      </section>
+    </>
   );
 }

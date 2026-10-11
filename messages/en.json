@@ -7,52 +7,62 @@
     "subscribe": "Subscribe"
   },
   "home": {
-    "basedIn": "Based in",
-    "currentFocus": "Current focus",
-    "latestPosts": "Latest posts",
-    "fromNewsletter": "From the newsletter",
-    "seeAll": "See all",
-    "dailyTools": "Daily tools",
-    "devStack": "Development stack",
-    "contactTitle": "Contact",
-    "contactText": "Want to chat, collaborate or work together? Drop me a line.",
-    "inquiries": "General & business inquiries"
+    "basedIn": "Based In",
+    "codingSince": "Coding Since",
+    "mySocials": "My Socials",
+    "connect": "Connect with me on",
+    "platforms": "these platforms",
+    "alwaysLearning": "Always Learning",
+    "exploring": "Exploring",
+    "myProducts": "My Products",
+    "viewAll": "View All",
+    "techStack": "Tech Stack"
   },
   "projects": {
-    "visit": "Visit site",
+    "visit": "Visit Site",
     "empty": "No projects yet."
   },
   "posts": {
+    "articles": "Articles",
+    "latest": "Latest articles",
     "minRead": "{minutes} min read",
     "empty": "No posts yet.",
-    "back": "Back to newsletter",
+    "back": "← Newsletter",
     "onlySpanish": "This post is only available in Spanish.",
-    "onlyEnglish": "This post is only available in English.",
-    "enjoyed": "Enjoyed it? Get the next ones in your inbox."
+    "keepReading": "Keep Reading",
+    "related": "Related Articles",
+    "enjoyed": "Enjoyed this article?",
+    "getMore": "Get more like it.",
+    "subscribeLink": "Subscribe to the newsletter",
+    "subscribeRest": "to get my updates in your inbox."
   },
   "subscribe": {
     "placeholder": "you@email.com",
     "button": "Subscribe",
     "sending": "Sending…",
-    "success": "Done! You're subscribed.",
+    "success": "You're in! Thanks for subscribing.",
     "invalid": "Please enter a valid email.",
-    "error": "Something went wrong, please try again.",
-    "noSpam": "No spam. Unsubscribe anytime."
+    "error": "Something went wrong, please try again."
   },
   "services": {
-    "eyebrow": "Work with me",
-    "offerings": "What I do",
-    "orEmail": "or email me at"
+    "offerings": "Offerings",
+    "process": "Process",
+    "fit": "Fit"
   },
   "footer": {
-    "rights": "All rights reserved."
+    "letsTalk": "Let's Talk",
+    "business": "Business Inquiries",
+    "menu": "Menu",
+    "follow": "Follow",
+    "myProducts": "My Products",
+    "backToTop": "Back to Top"
   },
   "unsubscribe": {
     "title": "You've unsubscribed",
     "text": "You won't receive any more emails. You can subscribe again anytime.",
     "invalid": "This link is invalid or you're already unsubscribed.",
-    "back": "Back home",
-    "button": "Unsubscribe"
+    "button": "Unsubscribe",
+    "back": "Back home"
   },
   "notFound": {
     "title": "Page not found",

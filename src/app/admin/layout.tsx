@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { inter } from "../fonts";
 import "../globals.css";
 
 export const dynamic = "force-dynamic";
@@ -11,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={inter.variable}>
-      <body className="bg-soft font-sans">{children}</body>
+    <html lang="es">
+      <body className="bg-[#F7F7F7] font-sans">{children}</body>
     </html>
   );
 }

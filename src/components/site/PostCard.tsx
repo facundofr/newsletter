@@ -4,40 +4,42 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { formatDate, pickField } from "@/lib/text";
 import { Avatar } from "./Avatar";
+import { NewspaperIcon } from "./icons";
 
 type Props = {
-  post: Pick<Post, "slug" | "titleEs" | "titleEn" | "excerptEs" | "excerptEn" | "coverImage" | "publishedAt" | "readingMinutes">;
+  post: Pick<Post, "slug" | "titleEs" | "titleEn" | "coverImage" | "publishedAt" | "readingMinutes">;
   locale: Locale;
   author: { name: string; avatar: string };
+  longDate?: boolean;
 };
 
-export async function PostCard({ post, locale, author }: Props) {
+export async function PostCard({ post, locale, author, longDate = false }: Props) {
   const t = await getTranslations("posts");
-  const title = pickField(post.titleEs, post.titleEn, locale);
-  const excerpt = pickField(post.excerptEs, post.excerptEn, locale);
-
   return (
     <Link
       href={`/newsletter/${post.slug}`}
-      className="card group flex flex-col gap-4 p-3 transition hover:border-neutral-300 hover:shadow-sm sm:flex-row sm:items-center"
+      className="group flex flex-col overflow-hidden rounded-[16px] border border-black/[0.01] bg-[#F7F7F7] transition-colors hover:bg-[#F0F0F0]"
     >
-      <div className="aspect-[16/10] w-full shrink-0 overflow-hidden rounded-2xl bg-soft sm:w-56">
+      <div className="aspect-[16/10] w-full overflow-hidden">
         {post.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={post.coverImage} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+          <img src={post.coverImage} alt="" className="h-full w-full object-cover" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-4xl">✉️</div>
+          <div className="flex h-full w-full items-center justify-center bg-[#EFEFEF]">
+            <NewspaperIcon strokeWidth={1.5} className="h-12 w-12 text-black/20" />
+          </div>
         )}
       </div>
-      <div className="flex min-w-0 flex-1 flex-col gap-2 px-1 pb-1 sm:py-1 sm:pr-3">
-        <p className="text-xs text-muted">
-          {formatDate(post.publishedAt, locale)} · {t("minRead", { minutes: post.readingMinutes })}
+      <div className="flex flex-1 flex-col gap-3 px-[20px] pb-[20px] pt-[16px]">
+        <p className="text-[12px] font-semibold text-black/50">
+          {formatDate(post.publishedAt, locale, longDate)} · {t("minRead", { minutes: post.readingMinutes })}
         </p>
-        <h3 className="text-lg font-semibold leading-snug tracking-tight">{title}</h3>
-        {excerpt && <p className="line-clamp-2 text-sm text-muted">{excerpt}</p>}
-        <div className="mt-1 flex items-center gap-2 text-xs text-muted">
+        <h3 className="text-[16px] font-semibold leading-[22px] tracking-[-0.32px] text-black transition-colors group-hover:text-[#1E6EF4]">
+          {pickField(post.titleEs, post.titleEn, locale)}
+        </h3>
+        <div className="mt-auto flex items-center gap-2">
           <Avatar src={author.avatar} name={author.name} size={20} />
-          {author.name}
+          <span className="text-[12px] font-semibold text-black/50">{author.name}</span>
         </div>
       </div>
     </Link>

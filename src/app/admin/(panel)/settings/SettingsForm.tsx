@@ -87,6 +87,21 @@ function FieldInput({ field, value, onChange }: { field: Field; value: unknown; 
           <textarea value={String(value ?? "")} onChange={(e) => onChange(e.target.value)} rows={3} className="input" />
         </div>
       );
+    case "color":
+      return (
+        <div>
+          <label className="label">{field.label}</label>
+          <div className="flex items-center gap-3">
+            <input
+              type="color"
+              value={String(value || "#1A1A1A")}
+              onChange={(e) => onChange(e.target.value)}
+              className="h-10 w-14 cursor-pointer rounded-lg border border-black/[0.07] bg-white p-1"
+            />
+            <input value={String(value ?? "")} onChange={(e) => onChange(e.target.value)} className="input w-32" />
+          </div>
+        </div>
+      );
     case "image":
       return (
         <div>

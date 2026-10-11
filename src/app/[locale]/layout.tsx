@@ -5,10 +5,9 @@ import { setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
 import { getSettings } from "@/lib/settings";
 import { pick } from "@/lib/text";
-import { Header } from "@/components/site/Header";
+import { Dock } from "@/components/site/Dock";
 import { Footer } from "@/components/site/Footer";
-import { MobileNav } from "@/components/site/NavLinks";
-import { inter } from "../fonts";
+import { LangToggle } from "@/components/site/LangToggle";
 import "../globals.css";
 
 // Content comes from the database and is edited live from /admin.
@@ -37,13 +36,13 @@ export default async function LocaleLayout({ children, params }: Props) {
   const settings = await getSettings();
 
   return (
-    <html lang={locale} className={inter.variable}>
-      <body className="font-sans">
+    <html lang={locale}>
+      <body className="bg-white font-sans text-black">
         <NextIntlClientProvider>
-          <Header settings={settings} />
-          <main>{children}</main>
+          <LangToggle />
+          <main className="min-h-screen bg-white">{children}</main>
           <Footer settings={settings} />
-          <MobileNav />
+          <Dock />
         </NextIntlClientProvider>
       </body>
     </html>

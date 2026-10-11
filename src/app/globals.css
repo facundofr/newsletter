@@ -8,36 +8,102 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-white text-ink;
-  }
-  ::selection {
-    @apply bg-ink text-white;
+    @apply bg-white text-black;
   }
 }
 
 @layer components {
-  .container-site {
-    @apply mx-auto w-full max-w-5xl px-4 sm:px-6;
+  /* Shared building blocks of the public site (values copied from the reference design). */
+  .eyebrow {
+    @apply text-[12px] font-semibold uppercase tracking-[0.04em] text-black/50;
   }
+  .btn-blue {
+    @apply inline-flex items-center justify-center rounded-full bg-[#1E6EF4] px-6 py-[14px] text-[14px] font-semibold text-white transition-colors hover:bg-[#1A62DB];
+  }
+  .tile {
+    @apply rounded-[24px] border border-black/[0.01] bg-[#F7F7F7];
+  }
+  .round-icon {
+    @apply flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full border border-black/[0.06] bg-white;
+  }
+
+  /* Admin panel */
   .card {
-    @apply rounded-3xl border border-line bg-white;
-  }
-  .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3.5 py-1.5 text-sm text-ink;
+    @apply rounded-3xl border border-black/[0.07] bg-white;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-[#1E6EF4] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1A62DB] disabled:opacity-50;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-medium text-ink transition hover:bg-soft;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-black/[0.07] bg-white px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#F7F7F7];
   }
   .input {
-    @apply w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none transition placeholder:text-neutral-400 focus:border-neutral-400;
+    @apply w-full rounded-xl border border-black/[0.07] bg-white px-3.5 py-2.5 text-sm outline-none transition placeholder:text-black/30 focus:border-[#1E6EF4];
   }
   .label {
-    @apply mb-1.5 block text-sm font-medium;
-  }
-  .eyebrow {
-    @apply text-sm font-medium text-muted;
+    @apply mb-1.5 block text-sm font-semibold;
   }
 }
+
+/* Infinite marquee for the hero chips. Content is duplicated, so -50% loops seamlessly. */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.marquee-left { animation: marquee-left 60s linear infinite; }
+.marquee-right { animation: marquee-right 60s linear infinite; }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Map pins dropping in (Based In card) */
+@keyframes pin-drop {
+  from { opacity: 0; transform: translateY(-30px) scale(0.7); }
+  to { opacity: 1; transform: none; }
+}
+.is-visible .pin { animation: pin-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.pin { opacity: 0; }
+
+/* Code lines typing in (Coding Since card) */
+@keyframes line-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: none; }
+}
+.is-visible .code-line { animation: line-in 0.4s ease both; }
+.code-line { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-left, .marquee-right { animation: none; }
+  .reveal, .pin, .code-line { opacity: 1; transform: none; animation: none; transition: none; }
+}
+
+/* Article body */
+.article-body {
+  @apply text-[17px] leading-[1.7] text-black/80;
+}
+.article-body > * + * { margin-top: 1.1em; }
+.article-body h2 { @apply mt-10 text-[28px] font-semibold leading-[34px] tracking-[-0.56px] text-black; }
+.article-body h3 { @apply mt-8 text-[22px] font-semibold leading-[28px] tracking-[-0.44px] text-black; }
+.article-body a { @apply text-[#1E6EF4] underline-offset-4 hover:underline; }
+.article-body strong { @apply font-semibold text-black; }
+.article-body ul { @apply list-disc pl-6; }
+.article-body ol { @apply list-decimal pl-6; }
+.article-body li + li { margin-top: 0.4em; }
+.article-body blockquote { @apply border-l-2 border-black/10 pl-5 text-black/60; }
+.article-body img { @apply my-8 w-full rounded-[16px] border border-black/[0.07]; }
+.article-body pre { @apply overflow-x-auto rounded-[16px] bg-[#F7F7F7] p-5 text-[14px]; }
+.article-body code { @apply rounded bg-[#F7F7F7] px-1.5 py-0.5 text-[0.9em]; }
+.article-body pre code { @apply bg-transparent p-0; }
+.article-body hr { @apply my-10 border-black/[0.07]; }

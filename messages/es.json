@@ -8,51 +8,61 @@
   },
   "home": {
     "basedIn": "Vivo en",
-    "currentFocus": "Foco actual",
-    "latestPosts": "Últimos artículos",
-    "fromNewsletter": "Del newsletter",
-    "seeAll": "Ver todos",
-    "dailyTools": "Herramientas diarias",
-    "devStack": "Stack de desarrollo",
-    "contactTitle": "Contacto",
-    "contactText": "¿Querés charlar, colaborar o trabajar juntos? Escribime.",
-    "inquiries": "Consultas generales y negocios"
+    "codingSince": "Programando desde",
+    "mySocials": "Mis redes",
+    "connect": "Conectá conmigo en",
+    "platforms": "estas plataformas",
+    "alwaysLearning": "Siempre aprendiendo",
+    "exploring": "Explorando",
+    "myProducts": "Mis proyectos",
+    "viewAll": "Ver todos",
+    "techStack": "Tech Stack"
   },
   "projects": {
     "visit": "Visitar sitio",
     "empty": "Todavía no hay proyectos."
   },
   "posts": {
+    "articles": "Artículos",
+    "latest": "Últimos artículos",
     "minRead": "{minutes} min de lectura",
     "empty": "Todavía no hay artículos.",
-    "back": "Volver al newsletter",
+    "back": "← Newsletter",
     "onlySpanish": "Este artículo está disponible solo en español.",
-    "onlyEnglish": "Este artículo está disponible solo en inglés.",
-    "enjoyed": "¿Te gustó? Recibí los próximos en tu mail."
+    "keepReading": "Seguí leyendo",
+    "related": "Artículos relacionados",
+    "enjoyed": "¿Te gustó el artículo?",
+    "getMore": "Recibí más como este.",
+    "subscribeLink": "Suscribite al newsletter",
+    "subscribeRest": "para recibir mis actualizaciones en tu mail."
   },
   "subscribe": {
     "placeholder": "tu@email.com",
     "button": "Suscribirme",
     "sending": "Enviando…",
-    "success": "¡Listo! Ya estás suscripto.",
+    "success": "¡Listo! Gracias por suscribirte.",
     "invalid": "Ingresá un email válido.",
-    "error": "Algo salió mal, probá de nuevo.",
-    "noSpam": "Sin spam. Te podés dar de baja cuando quieras."
+    "error": "Algo salió mal, probá de nuevo."
   },
   "services": {
-    "eyebrow": "Trabajemos juntos",
-    "offerings": "Qué hago",
-    "orEmail": "o escribime a"
+    "offerings": "Servicios",
+    "process": "Proceso",
+    "fit": "Fit"
   },
   "footer": {
-    "rights": "Todos los derechos reservados."
+    "letsTalk": "Hablemos",
+    "business": "Consultas comerciales",
+    "menu": "Menú",
+    "follow": "Seguime",
+    "myProducts": "Mis proyectos",
+    "backToTop": "Volver arriba"
   },
   "unsubscribe": {
     "title": "Te diste de baja",
     "text": "No vas a recibir más emails. Podés volver a suscribirte cuando quieras.",
     "invalid": "El link no es válido o ya te diste de baja.",
-    "back": "Volver al inicio",
-    "button": "Darme de baja"
+    "button": "Darme de baja",
+    "back": "Volver al inicio"
   },
   "notFound": {
     "title": "Página no encontrada",

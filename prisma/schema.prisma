@@ -41,6 +41,7 @@ model Project {
   image         String?
   url           String?
   tag           String?
+  accentColor   String?
   featured      Boolean  @default(true)
   order         Int      @default(0)
   createdAt     DateTime @default(now())

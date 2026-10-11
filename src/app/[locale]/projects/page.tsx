@@ -4,13 +4,15 @@ import type { Locale } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import { getSettings } from "@/lib/settings";
 import { pick } from "@/lib/text";
+import { HeroSubtitle, PageHero } from "@/components/site/PageHero";
 import { ProjectCard } from "@/components/site/ProjectCard";
+import { Reveal } from "@/components/site/Reveal";
 
 type Props = { params: Promise<{ locale: Locale }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return { title: pick((await getSettings()).products.title, locale) };
+  return { title: pick((await getSettings()).products.pageTitle, locale) };
 }
 
 export default async function ProjectsPage({ params }: Props) {
@@ -22,16 +24,25 @@ export default async function ProjectsPage({ params }: Props) {
   ]);
 
   return (
-    <div className="container-site pt-10 sm:pt-20">
-      <p className="eyebrow">{pick(s.products.subtitle, locale)}</p>
-      <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">{pick(s.products.title, locale)}</h1>
-      {projects.length === 0 ? (
-        <p className="mt-12 text-muted">{t("empty")}</p>
-      ) : (
-        <div className="mt-12 grid gap-4 sm:grid-cols-2">
-          {projects.map((p) => <ProjectCard key={p.id} project={p} locale={locale} />)}
-        </div>
-      )}
-    </div>
+    <>
+      <PageHero
+        icon={<span className="text-[42px] leading-none sm:text-[56px]">{s.products.pageEmoji}</span>}
+        title={pick(s.products.pageTitle, locale)}
+        subtitle={<HeroSubtitle>{pick(s.products.pageSubtitle, locale)}</HeroSubtitle>}
+      />
+      <section className="mx-auto max-w-[880px] px-[20px] pb-20 sm:px-6">
+        {projects.length === 0 ? (
+          <p className="text-center text-[14px] font-semibold text-black/50">{t("empty")}</p>
+        ) : (
+          <div className="flex flex-col gap-[16px] sm:gap-[24px]">
+            {projects.map((p) => (
+              <Reveal key={p.id}>
+                <ProjectCard project={p} locale={locale} />
+              </Reveal>
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 }

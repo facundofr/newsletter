@@ -6,154 +6,134 @@ import { getSettings } from "@/lib/settings";
 import type { StackItem } from "@/lib/settings-schema";
 import { pick } from "@/lib/text";
 import { Avatar } from "@/components/site/Avatar";
+import { Bento } from "@/components/site/Bento";
+import { Carousel } from "@/components/site/Carousel";
 import { Icon } from "@/components/site/Icon";
-import { ArrowUpRight, CodeIcon, PinIcon } from "@/components/site/icons";
-import { PostCard } from "@/components/site/PostCard";
+import { Marquee } from "@/components/site/Marquee";
 import { ProjectCard } from "@/components/site/ProjectCard";
+import { Reveal } from "@/components/site/Reveal";
 import { SectionHeading } from "@/components/site/SectionHeading";
-import { SubscribeForm } from "@/components/site/SubscribeForm";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  const [s, t, tNav, projects, posts] = await Promise.all([
+  const [s, t, projects] = await Promise.all([
     getSettings(),
     getTranslations("home"),
-    getTranslations("nav"),
-    prisma.project.findMany({ where: { featured: true }, orderBy: [{ order: "asc" }, { createdAt: "desc" }], take: 4 }),
-    prisma.post.findMany({ where: { status: "PUBLISHED", publishedAt: { lte: new Date() } }, orderBy: { publishedAt: "desc" }, take: 3 }),
+    prisma.project.findMany({ where: { featured: true }, orderBy: [{ order: "asc" }, { createdAt: "desc" }] }),
   ]);
-  const author = { name: s.profile.name, avatar: s.profile.avatar };
+  const p = (v: Parameters<typeof pick>[0]) => pick(v, locale);
 
   return (
-    <div className="container-site">
+    <>
       {/* Hero */}
-      <section className="pb-12 pt-10 sm:pt-20">
-        <Avatar src={s.profile.avatar} name={s.profile.name} size={72} />
-        <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight sm:text-6xl">
-          {pick(s.hero.title, locale)} <span className="text-muted">{pick(s.hero.subtitle, locale)}</span>
-        </h1>
-        {s.hero.chips.length > 0 && (
-          <div className="mt-8 flex flex-wrap gap-2">
-            {s.hero.chips.map((c, i) => (
-              <span key={i} className="chip">{pick(c.label, locale)}</span>
-            ))}
-          </div>
-        )}
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/newsletter" className="btn-primary">{tNav("newsletter")}</Link>
-          <Link href="/services" className="btn-secondary">{tNav("services")}</Link>
+      <section className="flex flex-col items-center overflow-hidden pb-20 pt-20 sm:pb-40 sm:pt-32">
+        <div className="max-w-7xl px-6">
+          <Reveal className="relative mx-auto mb-8 h-[90px] w-[90px] sm:mb-12 sm:h-[120px] sm:w-[120px]">
+            <div className="flex h-[90px] w-[90px] items-center justify-center overflow-hidden rounded-[24px] bg-[#F7F7F7] sm:h-[120px] sm:w-[120px] sm:rounded-[32px]">
+              <Avatar src={s.profile.avatar} name={s.profile.name} size={120} rounded="0" />
+            </div>
+          </Reveal>
+          <Reveal className="mx-auto mb-[56px] flex max-w-[600px] flex-col items-center text-center sm:mb-[112px]" delay={100}>
+            <h1 className="text-[32px] font-semibold leading-[38px] tracking-[-0.96px] text-black sm:text-[48px] sm:leading-[55.7px] sm:tracking-[-1.44px]">
+              {p(s.hero.title)}
+            </h1>
+            <h2 className="max-w-[460px] text-[32px] font-semibold leading-[38px] tracking-[-0.96px] text-black/50 sm:text-[48px] sm:leading-[55.7px] sm:tracking-[-1.44px]">
+              {p(s.hero.subtitle)}
+            </h2>
+          </Reveal>
         </div>
+        <Marquee top={s.hero.chips.map((c) => p(c.label))} bottom={s.about.highlights.map((c) => p(c.label))} />
       </section>
 
-      {/* About bento */}
-      <section className="grid gap-3 md:grid-cols-3">
-        <div className="card flex flex-col justify-between gap-6 p-6">
-          <PinIcon className="h-5 w-5 text-muted" />
-          <div>
-            <p className="eyebrow">{t("basedIn")}</p>
-            <p className="mt-1 text-lg font-semibold tracking-tight">{pick(s.profile.location, locale)}</p>
-          </div>
-        </div>
-        <div className="card flex flex-col justify-between gap-6 p-6">
-          <CodeIcon className="h-5 w-5 text-muted" />
-          <p className="text-lg font-semibold tracking-tight">{pick(s.profile.codingSince, locale)}</p>
-        </div>
-        <div className="card flex flex-wrap content-center gap-2 p-6">
-          {s.about.highlights.map((h, i) => (
-            <span key={i} className="chip bg-soft">{pick(h.label, locale)}</span>
-          ))}
-        </div>
-        <div className="card p-6 md:col-span-2">
-          <p className="text-lg leading-relaxed sm:text-xl">{pick(s.about.bio, locale)}</p>
-        </div>
-        <div className="card flex flex-col justify-between gap-6 p-6">
-          <span className="relative flex h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500" />
-          </span>
-          <div>
-            <p className="eyebrow">{t("currentFocus")}</p>
-            <p className="mt-1 text-lg font-semibold tracking-tight">{pick(s.about.focus, locale)}</p>
-          </div>
-        </div>
-      </section>
+      <Bento
+        socials={s.socials}
+        text={{
+          headline: p(s.about.headline),
+          bio: p(s.about.bio),
+          emoji: s.about.emoji,
+          location: p(s.profile.location),
+          codingSince: p(s.profile.codingSince),
+          focus: p(s.about.focus),
+          focusEmoji: s.about.focusEmoji,
+          name: p(s.hero.title),
+          basedIn: t("basedIn"),
+          codingSinceLabel: t("codingSince"),
+          mySocials: t("mySocials"),
+          connect: t("connect"),
+          platforms: t("platforms"),
+          alwaysLearning: t("alwaysLearning"),
+          exploring: t("exploring"),
+          lang: locale,
+        }}
+      />
 
-      {/* Projects */}
+      {/* Products */}
       {projects.length > 0 && (
-        <section className="mt-24">
-          <SectionHeading
-            eyebrow={pick(s.products.subtitle, locale)}
-            title={pick(s.products.title, locale)}
-            action={<Link href="/projects" className="text-sm text-muted hover:text-ink">{t("seeAll")} →</Link>}
-          />
-          <div className="grid gap-4 sm:grid-cols-2">
-            {projects.map((p) => <ProjectCard key={p.id} project={p} locale={locale} />)}
-          </div>
+        <section className="pb-20 sm:pb-40">
+          <Reveal className="mx-auto max-w-[880px] px-[40px] sm:px-6">
+            <SectionHeading
+              eyebrow={t("myProducts")}
+              title={p(s.products.homeTitle)}
+              size="md"
+              action={
+                <Link href="/projects" className="btn-blue w-full whitespace-nowrap sm:w-auto sm:py-3">
+                  {t("viewAll")}
+                </Link>
+              }
+            />
+          </Reveal>
+          <Reveal>
+            <Carousel>
+              {projects.map((project) => (
+                <ProjectCard key={project.id} project={project} locale={locale} />
+              ))}
+            </Carousel>
+          </Reveal>
         </section>
       )}
 
       {/* Tech stack */}
-      <section className="mt-24">
-        <SectionHeading eyebrow={pick(s.techStack.subtitle, locale)} title={pick(s.techStack.title, locale)} />
-        <div className="grid gap-3 md:grid-cols-2">
-          <StackCard title={t("dailyTools")} items={s.techStack.tools} />
-          <StackCard title={t("devStack")} items={s.techStack.dev} />
+      <section className="mx-auto max-w-[880px] px-[28px] pb-20 sm:px-6">
+        <Reveal>
+          <SectionHeading eyebrow={t("techStack")} title={p(s.techStack.title)} />
+        </Reveal>
+        <div className="grid grid-cols-1 gap-x-[40px] gap-y-8 sm:grid-cols-2 sm:gap-y-0 md:gap-x-[88px]">
+          <StackColumn title={p(s.techStack.toolsTitle)} items={s.techStack.tools} locale={locale} />
+          <StackColumn title={p(s.techStack.devTitle)} items={s.techStack.dev} locale={locale} />
         </div>
       </section>
-
-      {/* Latest posts */}
-      {posts.length > 0 && (
-        <section className="mt-24">
-          <SectionHeading
-            eyebrow={t("fromNewsletter")}
-            title={t("latestPosts")}
-            action={<Link href="/newsletter" className="text-sm text-muted hover:text-ink">{t("seeAll")} →</Link>}
-          />
-          <div className="flex flex-col gap-3">
-            {posts.map((p) => <PostCard key={p.id} post={p} locale={locale} author={author} />)}
-          </div>
-        </section>
-      )}
-
-      {/* Contact */}
-      <section className="mt-24 rounded-4xl bg-soft p-8 sm:p-12">
-        <p className="eyebrow">{t("contactTitle")}</p>
-        <h2 className="mt-2 max-w-xl text-2xl font-semibold tracking-tight sm:text-3xl">{t("contactText")}</h2>
-        <a href={`mailto:${s.profile.email}`} className="mt-6 inline-flex items-center gap-2 break-all text-lg font-medium underline-offset-4 hover:underline">
-          {s.profile.email} <ArrowUpRight />
-        </a>
-        <p className="mt-1 text-sm text-muted">{t("inquiries")}</p>
-        <div className="mt-8">
-          <SubscribeForm compact />
-        </div>
-      </section>
-    </div>
+    </>
   );
 }
 
-function StackCard({ title, items }: { title: string; items: StackItem[] }) {
+function StackColumn({ title, items, locale }: { title: string; items: StackItem[]; locale: Locale }) {
   return (
-    <div className="card p-6">
-      <p className="eyebrow mb-4">{title}</p>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {items.map((item, i) => {
-          const content = (
-            <>
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-soft text-lg">
-                <Icon value={item.icon} className="h-5 w-5" />
+    <Reveal>
+      <p className="border-b border-black/[0.07] pb-[16px] text-[14px] font-semibold leading-[19px] text-black/50">{title}</p>
+      {items.map((item, i) => {
+        const row = (
+          <>
+            <div
+              className="flex h-[40px] w-[40px] shrink-0 items-center justify-center overflow-hidden rounded-[10px] text-[20px] text-white"
+              style={{ backgroundColor: item.color || "#1A1A1A" }}
+            >
+              <Icon value={item.icon} className="h-full w-full" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[14px] font-semibold leading-[19px] text-black transition-colors group-hover:text-[#1E6EF4]">
+                {item.name}
               </span>
-              <span className="truncate text-sm font-medium">{item.name}</span>
-            </>
-          );
-          return item.url ? (
-            <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 rounded-2xl p-1.5 transition hover:bg-soft">
-              {content}
-            </a>
-          ) : (
-            <div key={i} className="flex items-center gap-2.5 p-1.5">{content}</div>
-          );
-        })}
-      </div>
-    </div>
+              <span className="text-[14px] font-semibold leading-[19px] text-black/50">{pick(item.description, locale)}</span>
+            </div>
+          </>
+        );
+        const cls = "group flex items-center gap-[16px] border-b border-black/[0.07] py-[16px]";
+        return item.url ? (
+          <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className={cls}>{row}</a>
+        ) : (
+          <div key={i} className={cls}>{row}</div>
+        );
+      })}
+    </Reveal>
   );
 }

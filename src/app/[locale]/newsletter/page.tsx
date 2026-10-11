@@ -4,8 +4,12 @@ import type { Locale } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import { getSettings } from "@/lib/settings";
 import { pick } from "@/lib/text";
+import { NewspaperIcon } from "@/components/site/icons";
+import { HeroSubtitle, PageHero } from "@/components/site/PageHero";
 import { PostCard } from "@/components/site/PostCard";
-import { SubscribeForm } from "@/components/site/SubscribeForm";
+import { Reveal } from "@/components/site/Reveal";
+import { SectionHeading } from "@/components/site/SectionHeading";
+import { SubscribeBox } from "@/components/site/SubscribeBox";
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -28,27 +32,37 @@ export default async function NewsletterPage({ params }: Props) {
   const author = { name: s.profile.name, avatar: s.profile.avatar };
 
   return (
-    <div className="container-site pt-10 sm:pt-20">
-      <section id="subscribe" className="scroll-mt-24 rounded-4xl bg-soft px-6 py-12 text-center sm:px-12 sm:py-16">
-        <p className="eyebrow">Newsletter</p>
-        <h1 className="mx-auto mt-3 max-w-2xl text-3xl font-semibold tracking-tight sm:text-5xl">
-          {pick(s.newsletter.title, locale)}
-        </h1>
-        <p className="mx-auto mt-4 max-w-xl text-muted">{pick(s.newsletter.description, locale)}</p>
-        <div className="mt-8 flex justify-center">
-          <SubscribeForm />
-        </div>
+    <>
+      <PageHero
+        icon={<NewspaperIcon strokeWidth={1.75} className="h-10 w-10 text-black/70 sm:h-14 sm:w-14" />}
+        title={pick(s.newsletter.title, locale)}
+        subtitle={<HeroSubtitle>{pick(s.newsletter.subtitle, locale)}</HeroSubtitle>}
+      />
+
+      <section className="mx-auto max-w-[880px] px-6 pb-20 sm:pb-40">
+        <Reveal>
+          <SubscribeBox settings={s} locale={locale} />
+        </Reveal>
       </section>
 
-      <section className="mx-auto mt-16 max-w-3xl">
+      <section className="mx-auto max-w-[880px] px-6 pb-16 sm:pb-20">
+        <Reveal>
+          <SectionHeading eyebrow={t("articles")} title={t("latest")} />
+        </Reveal>
         {posts.length === 0 ? (
-          <p className="text-center text-muted">{t("empty")}</p>
+          <p className="text-[14px] font-semibold text-black/50">{t("empty")}</p>
         ) : (
-          <div className="flex flex-col gap-3">
-            {posts.map((p) => <PostCard key={p.id} post={p} locale={locale} author={author} />)}
+          <div className="grid grid-cols-1 gap-6 sm:gap-4 md:grid-cols-3">
+            {posts.map((post, i) => (
+              <Reveal key={post.id} delay={(i % 3) * 80} className="flex">
+                <div className="flex w-full [&>a]:w-full">
+                  <PostCard post={post} locale={locale} author={author} />
+                </div>
+              </Reveal>
+            ))}
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 }

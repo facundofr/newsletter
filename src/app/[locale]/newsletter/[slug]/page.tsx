@@ -9,8 +9,8 @@ import { prisma } from "@/lib/prisma";
 import { getSettings } from "@/lib/settings";
 import { formatDate, pickField } from "@/lib/text";
 import { Avatar } from "@/components/site/Avatar";
-import { ArrowLeft } from "@/components/site/icons";
-import { SubscribeForm } from "@/components/site/SubscribeForm";
+import { PostCard } from "@/components/site/PostCard";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
 
@@ -40,46 +40,87 @@ export default async function PostPage({ params }: Props) {
   const { locale, slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
-  const [s, t] = await Promise.all([getSettings(), getTranslations("posts")]);
+  const [s, t, related] = await Promise.all([
+    getSettings(),
+    getTranslations("posts"),
+    prisma.post.findMany({
+      where: { status: "PUBLISHED", publishedAt: { lte: new Date() }, NOT: { id: post.id } },
+      orderBy: { publishedAt: "desc" },
+      take: 3,
+    }),
+  ]);
 
   const missingEnglish = locale === "en" && !post.contentEn?.trim();
-  const content = pickField(post.contentEs, post.contentEn, locale);
+  const excerpt = pickField(post.excerptEs, post.excerptEn, locale);
+  const author = { name: s.profile.name, avatar: s.profile.avatar };
 
   return (
-    <article className="container-site max-w-3xl pt-10 sm:pt-16">
-      {post.status !== "PUBLISHED" && (
-        <p className="mb-6 rounded-2xl bg-amber-50 px-4 py-3 text-sm text-amber-800">Vista previa — borrador no publicado</p>
-      )}
-      <Link href="/newsletter" className="inline-flex items-center gap-2 text-sm text-muted hover:text-ink">
-        <ArrowLeft /> {t("back")}
-      </Link>
-      <h1 className="mt-6 text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
-        {pickField(post.titleEs, post.titleEn, locale)}
-      </h1>
-      <div className="mt-6 flex items-center gap-3 text-sm text-muted">
-        <Avatar src={s.profile.avatar} name={s.profile.name} size={32} />
-        <span className="font-medium text-ink">{s.profile.name}</span>
-        <span>·</span>
-        <span>{formatDate(post.publishedAt, locale)}</span>
-        <span>·</span>
-        <span>{t("minRead", { minutes: post.readingMinutes })}</span>
-      </div>
-      {post.coverImage && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={post.coverImage} alt="" className="mt-10 w-full rounded-3xl border border-line object-cover" />
-      )}
-      {missingEnglish && <p className="mt-8 rounded-2xl bg-soft px-4 py-3 text-sm text-muted">{t("onlySpanish")}</p>}
-      <div
-        className="prose prose-neutral mt-10 max-w-none prose-headings:tracking-tight prose-a:underline-offset-4 prose-img:rounded-2xl sm:prose-lg"
-        // Content is authored only by the admin.
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
-      <div className="mt-16 rounded-4xl bg-soft p-8 text-center">
-        <p className="text-lg font-semibold tracking-tight">{t("enjoyed")}</p>
-        <div className="mt-6 flex justify-center">
-          <SubscribeForm compact />
+    <>
+      <section className="mx-auto max-w-[720px] px-6 pb-12 pt-32">
+        {post.status !== "PUBLISHED" && (
+          <p className="mb-8 rounded-[16px] bg-amber-50 px-4 py-3 text-[14px] font-semibold text-amber-800">
+            Vista previa — borrador no publicado
+          </p>
+        )}
+        <Link href="/newsletter" className="mb-12 inline-block text-[14px] font-semibold text-black/40 transition-colors hover:text-black">
+          {t("back")}
+        </Link>
+        <div className="flex flex-col gap-[4px]">
+          <p className="eyebrow">{formatDate(post.publishedAt, locale, true)}</p>
+          <h1 className="text-[32px] font-semibold leading-[38px] tracking-[-0.64px] text-black sm:text-[44px] sm:leading-[51px] sm:tracking-[-0.88px]">
+            {pickField(post.titleEs, post.titleEn, locale)}
+          </h1>
+          {excerpt && <p className="mt-2 text-[14px] font-semibold leading-[19px] text-black/50">{excerpt}</p>}
+          <div className="mt-6 flex items-center gap-3">
+            <Avatar src={author.avatar} name={author.name} size={32} />
+            <div className="flex flex-col">
+              <span className="text-[14px] font-semibold leading-[18px] text-black">{author.name}</span>
+              <span className="text-[12px] font-semibold text-black/50">{t("minRead", { minutes: post.readingMinutes })}</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </article>
+      </section>
+
+      <article className="mx-auto max-w-[720px] px-6">
+        <div className="mb-10 border-t border-black/[0.07]" />
+        {post.coverImage && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={post.coverImage} alt="" className="mb-10 w-full rounded-[16px] border border-black/[0.07] object-cover" />
+        )}
+        {missingEnglish && (
+          <p className="mb-8 rounded-[16px] bg-[#F7F7F7] px-4 py-3 text-[14px] font-semibold text-black/50">{t("onlySpanish")}</p>
+        )}
+        <div
+          className="article-body"
+          // Content is authored only by the admin.
+          dangerouslySetInnerHTML={{ __html: pickField(post.contentEs, post.contentEn, locale) }}
+        />
+      </article>
+
+      {related.length > 0 && (
+        <section className="mx-auto max-w-[880px] px-6 pb-16 pt-24">
+          <SectionHeading eyebrow={t("keepReading")} title={t("related")} size="md" />
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {related.map((r) => (
+              <PostCard key={r.id} post={r} locale={locale} author={author} longDate />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className={`mx-auto max-w-[880px] px-6 pb-20 ${related.length ? "" : "pt-24"}`}>
+        <div className="flex flex-col rounded-[16px] border border-black/[0.01] bg-[#F7F7F7] px-[20px] py-[20px] sm:px-[32px] sm:py-[28px]">
+          <p className="text-[20px] font-semibold leading-[24px] tracking-[-0.6px] sm:text-[24px] sm:leading-[28.8px] sm:tracking-[-0.72px]">
+            <span className="text-black">{t("enjoyed")}</span> <span className="text-black/50">{t("getMore")}</span>
+          </p>
+          <p className="mt-2 text-[14px] font-semibold leading-[19px] text-black/50">
+            <Link href="/newsletter#subscribe" className="text-[#1E6EF4] hover:underline">
+              {t("subscribeLink")}
+            </Link>{" "}
+            {t("subscribeRest")}
+          </p>
+        </div>
+      </section>
+    </>
   );
 }
