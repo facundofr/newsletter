@@ -28,21 +28,23 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       {/* Hero */}
       <section className="flex flex-col items-center overflow-hidden pb-20 pt-20 sm:pb-40 sm:pt-32">
         <div className="max-w-7xl px-6">
-          <Reveal className="relative mx-auto mb-8 h-[90px] w-[90px] sm:mb-12 sm:h-[120px] sm:w-[120px]">
+          <div className="enter-tile relative mx-auto mb-8 h-[90px] w-[90px] sm:mb-12 sm:h-[120px] sm:w-[120px]">
             <div className="flex h-[90px] w-[90px] items-center justify-center overflow-hidden rounded-[24px] bg-[#F7F7F7] sm:h-[120px] sm:w-[120px] sm:rounded-[32px]">
               <Avatar src={s.profile.avatar} name={s.profile.name} size={120} rounded="0" />
             </div>
-          </Reveal>
-          <Reveal className="mx-auto mb-[56px] flex max-w-[600px] flex-col items-center text-center sm:mb-[112px]" delay={100}>
+          </div>
+          <div className="enter-title mx-auto mb-[56px] flex max-w-[600px] flex-col items-center text-center sm:mb-[112px]">
             <h1 className="text-[32px] font-semibold leading-[38px] tracking-[-0.96px] text-black sm:text-[48px] sm:leading-[55.7px] sm:tracking-[-1.44px]">
               {p(s.hero.title)}
             </h1>
             <h2 className="max-w-[460px] text-[32px] font-semibold leading-[38px] tracking-[-0.96px] text-black/50 sm:text-[48px] sm:leading-[55.7px] sm:tracking-[-1.44px]">
               {p(s.hero.subtitle)}
             </h2>
-          </Reveal>
+          </div>
         </div>
-        <Marquee top={s.hero.chips.map((c) => p(c.label))} bottom={s.about.highlights.map((c) => p(c.label))} />
+        <div className="enter-rest">
+          <Marquee top={s.hero.chips.map((c) => p(c.label))} bottom={s.about.highlights.map((c) => p(c.label))} />
+        </div>
       </section>
 
       <Bento
@@ -108,8 +110,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
 function StackColumn({ title, items, locale }: { title: string; items: StackItem[]; locale: Locale }) {
   return (
-    <Reveal>
-      <p className="border-b border-black/[0.07] pb-[16px] text-[14px] font-semibold leading-[19px] text-black/50">{title}</p>
+    <div>
+      <Reveal>
+        <p className="border-b border-black/[0.07] pb-[16px] text-[14px] font-semibold leading-[19px] text-black/50">{title}</p>
+      </Reveal>
       {items.map((item, i) => {
         const row = (
           <>
@@ -128,12 +132,16 @@ function StackColumn({ title, items, locale }: { title: string; items: StackItem
           </>
         );
         const cls = "group flex items-center gap-[16px] border-b border-black/[0.07] py-[16px]";
-        return item.url ? (
-          <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className={cls}>{row}</a>
-        ) : (
-          <div key={i} className={cls}>{row}</div>
+        return (
+          <Reveal key={i} delay={Math.min(i, 5) * 60}>
+            {item.url ? (
+              <a href={item.url} target="_blank" rel="noopener noreferrer" className={cls}>{row}</a>
+            ) : (
+              <div className={cls}>{row}</div>
+            )}
+          </Reveal>
         );
       })}
-    </Reveal>
+    </div>
   );
 }

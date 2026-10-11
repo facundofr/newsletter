@@ -32,6 +32,7 @@ export function Dock() {
             <Link
               key={href}
               href={href}
+              prefetch
               aria-label={t(key)}
               className={`${BTN} group border border-black/[0.07] bg-white transition-colors duration-300 active:bg-black/[0.06]`}
             >
@@ -46,6 +47,7 @@ export function Dock() {
         <div className="mx-1 w-px self-stretch bg-black/10" />
         <Link
           href="/newsletter#subscribe"
+          prefetch
           aria-label={t("subscribe")}
           className={`${BTN} group border border-transparent bg-[#3b82f6] transition-colors hover:bg-[#2f74e8]`}
         >

@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   images: { unoptimized: true },
   experimental: {
     serverActions: { bodySizeLimit: "10mb" },
+    // Keep visited/prefetched pages in the client router cache so switching sections is instant.
+    staleTimes: { dynamic: 60, static: 300 },
   },
 };
 

@@ -18,6 +18,7 @@ export async function PostCard({ post, locale, author, longDate = false }: Props
   return (
     <Link
       href={`/newsletter/${post.slug}`}
+      prefetch
       className="group flex flex-col overflow-hidden rounded-[16px] border border-black/[0.01] bg-[#F7F7F7] transition-colors hover:bg-[#F0F0F0]"
     >
       <div className="aspect-[16/10] w-full overflow-hidden">

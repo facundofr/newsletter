@@ -63,7 +63,7 @@ export function Bento({ text, socials }: { text: Text; socials: SiteSettings["so
           </div>
         </Reveal>
 
-        <Reveal className="md:col-span-6" delay={100}>
+        <Reveal className="md:col-span-6" delay={160}>
           <div className="flex h-auto flex-col gap-4 md:h-[567px]">
             {/* Based in */}
             <div className={`${CARD} relative flex min-h-[220px] flex-1 flex-col overflow-hidden px-[20px] pt-[20px] sm:px-[32px] sm:pt-[28px]`}>
@@ -131,7 +131,7 @@ export function Bento({ text, socials }: { text: Text; socials: SiteSettings["so
         </Reveal>
 
         {/* Always learning */}
-        <Reveal className="md:col-span-7" delay={100}>
+        <Reveal className="md:col-span-7" delay={160}>
           <div className={`${CARD} flex h-auto flex-col justify-between overflow-hidden px-[20px] pb-[20px] pt-[20px] sm:relative sm:h-[273px] sm:px-[32px] sm:pb-[32px] sm:pt-[28px]`}>
             <Pill>{text.alwaysLearning}</Pill>
             <div className="mt-[16px] sm:mt-0 sm:max-w-[60%]">

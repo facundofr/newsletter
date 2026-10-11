@@ -43,7 +43,7 @@ export default async function ServicesPage({ params }: Props) {
         </Reveal>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {sv.offerings.map((o, i) => (
-            <Reveal key={i} delay={i * 80}>
+            <Reveal key={i} delay={i * 160}>
               <div className={CARD}>
                 <div className="flex items-center gap-[12px]">
                   <div className="round-icon">
@@ -64,7 +64,7 @@ export default async function ServicesPage({ params }: Props) {
         </Reveal>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {sv.steps.map((step, i) => (
-            <Reveal key={i} delay={(i % 2) * 80}>
+            <Reveal key={i} delay={(i % 2) * 160}>
               <div className={CARD}>
                 <div className="flex items-center gap-[12px]">
                   <div className="round-icon">

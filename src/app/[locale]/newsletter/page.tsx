@@ -54,7 +54,7 @@ export default async function NewsletterPage({ params }: Props) {
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:gap-4 md:grid-cols-3">
             {posts.map((post, i) => (
-              <Reveal key={post.id} delay={(i % 3) * 80} className="flex">
+              <Reveal key={post.id} delay={(i % 3) * 160} className="flex">
                 <div className="flex w-full [&>a]:w-full">
                   <PostCard post={post} locale={locale} author={author} />
                 </div>

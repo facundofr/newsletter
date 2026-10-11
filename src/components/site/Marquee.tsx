@@ -21,7 +21,10 @@ function Row({ items, palette, direction }: { items: string[]; palette: string[]
 
   return (
     <div className="relative w-screen overflow-hidden">
-      <div className={`flex w-max ${direction === "left" ? "marquee-left" : "marquee-right"}`}>
+      <div
+        className={`flex w-max ${direction === "left" ? "marquee-left" : "marquee-right"}`}
+        style={{ animationDuration: `${strip.length * 8}s` }}
+      >
         {[0, 1].map((copy) =>
           colored.map(({ label, colors: [bg, fg] }, i) => (
             <div
